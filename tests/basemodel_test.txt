@@ -1,0 +1,24 @@
+# A test for the base model
+
+```python
+>>> from models.base_model import BaseModel
+
+>>> my_model = BaseModel()
+
+>>> my_model.name = "First model"
+
+>>> my_model.num = 89
+
+>>> print (my_model.name)
+First model
+>>> print (my_model.id)
+
+>>> print (my_model.num)
+89
+>>> print (my_model.created_at)
+
+>>> print (BaseModel.num)
+Traceback (most recent call last):
+AttributeError: type object 'BaseModel' has no attribute 'num'
+
+```
