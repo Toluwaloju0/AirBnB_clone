@@ -29,13 +29,57 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         'To create a new class of BaseModel'
-        if len(sys.argv) == 2:
+        if not line:
             print("** class name missing **")
             return
         if line != "BaseModel":
             print("** class doesn't exist **")
             return
         model = BaseModel()
+        model.save()
+        print(model.id)
 
+    def do_show(self, line):
+        'Prints the string representation of an instance based \
+        on the class name and id'
+        if not line:
+            print('** class name missing **')
+            return
+        line = line.split()
+        if line[0] != 'BaseModel':
+            print('** class doesn\'t exist **')
+            return
+        if not line[1]:
+            print("** instance id missing **")
+            return
+        my_dict = strorage.all()
+        for key in my_dict:
+            a = key.split('.')
+            if a[1] == line[1]:
+                print(a[0])
+                return
+            continue
+        print("** no instance found **")
+
+    def do_destroy(self, line):
+        if not line:
+            print('** class name missing **')
+            return
+        line = line.split()
+        if line[0] != 'BaseModel':
+            print('** class doesn\'t exist **')
+            return
+        if not line[1]:
+            print("** instance id missing **")
+            return
+        my_dict = strorage.all()
+        for key in my_dict:
+            a = key.split('.')
+            if a[1] == line[1]:
+                del (key)
+                return
+            continue
+        print("** no instance found **")
+    
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
