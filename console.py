@@ -4,6 +4,8 @@
 import cmd
 import sys
 from models.base_model import BaseModel
+from models import storage
+import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -49,14 +51,14 @@ class HBNBCommand(cmd.Cmd):
         if line[0] != 'BaseModel':
             print('** class doesn\'t exist **')
             return
-        if not line[1]:
+        if len(line) != 2:
             print("** instance id missing **")
             return
-        my_dict = strorage.all()
-        for key in my_dict:
+        my_dict = storage.all()
+        for key in my_dict.keys():
             a = key.split('.')
-            if a[1] == line[1]:
-                print(a[0])
+            if line[1] == a[1]:
+                print(my_dict[key])
                 return
             continue
         print("** no instance found **")
@@ -69,17 +71,31 @@ class HBNBCommand(cmd.Cmd):
         if line[0] != 'BaseModel':
             print('** class doesn\'t exist **')
             return
-        if not line[1]:
+        if len(line) != 2:
             print("** instance id missing **")
             return
-        my_dict = strorage.all()
-        for key in my_dict:
+        my_dict = {}
+        with open("file.json", mode='r', encoding='utf-8') as a:
+            my_dict = json.loads(a.read())
+        for key in my_dict.keys():
             a = key.split('.')
             if a[1] == line[1]:
-                del (key)
+                del (my_dict[key])
+                with open("file.json", mode='w', encoding='utf-8') as a:
+                    a.write(json.dumps(my_dict))
+                storage.reload()
                 return
             continue
         print("** no instance found **")
-    
+
+    def do_all(self, line):
+        if len(line) == 0 or line == "BaseModel":
+            my_dict = storage.all()
+            for key in my_dict.keys():
+                print(my_dict[key])
+        else:
+            print("** class doesn't exist **")
+
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

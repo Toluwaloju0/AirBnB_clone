@@ -3,7 +3,7 @@
 
 import uuid
 from datetime import datetime
-from models .__init__ import storage
+from models import storage
 
 
 class BaseModel:
@@ -15,20 +15,21 @@ class BaseModel:
             args (list): a list of variables passed to the function
             kwargs (dict): a dictionary passed to the function
             """
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.today()
-        self.updated_at = datetime.today()
-        if kwargs is not None:
+        if len(kwargs) > 0:
             for a, b in kwargs.items():
                 if a == '__class__':
                     continue
-                elif a == 'created_at' or a == 'updated_at':
-                    setattr(self, a, datetime.fromisoformat(b))
-                    continue
-                setattr(self, a, b)
+                elif a == "created_at" or a == "updated_at":
+                    b = datetime.fromisoformat(b)
+                    setattr(self, a, b)
+                else:
+                    setattr(self, a, b)
         else:
-            obj = self.to_dict()
-            storage.new(obj)
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.today()
+            self.updated_at = datetime.today()
+            a = self.to_dict()
+            storage.new(a)
 
     def __str__(self):
         """To provide a string representation of the class
@@ -41,12 +42,19 @@ class BaseModel:
         """
 
         self.updated_at = datetime.today()
+        a = self.to_dict()
+        storage.new(a)
         storage.save()
 
     def to_dict(self):
         """To return a dictionary of the class"""
 
-        self.created_at = self.created_at.isoformat()
-        self.updated_at = self.updated_at.isoformat()
-        self.__dict__.update({'__class__': type(self).__name__})
-        return self.__dict__
+        a = {}
+        for key, value in self.__dict__.items():
+            a[key] = value
+        b = a['created_at']
+        a['created_at'] = b.isoformat()
+        b = a['updated_at']
+        a['updated_at'] = b.isoformat()
+        a.update({'__class__': type(self).__name__})
+        return a
