@@ -2,15 +2,19 @@
 """A module to store reviews"""
 
 
-from models.basemodel import BaseModel
+from models.base_model import BaseModel
 
 class Review(BaseModel):
     """A class of the city"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """A function to initialize variables"""
 
-        self.place_id = ""
-        self.user_id = ""
-        self.text = ""
+        if len(kwargs) > 0:
+            super().__init__(**kwargs)
+        else:
+            super().__init__()
+            self.place_id = ""
+            self.user_id = ""
+            self.text = ""
 

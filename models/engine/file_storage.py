@@ -21,9 +21,28 @@ class FileStorage:
         """
 
         from models.base_model import BaseModel
+        from models.user import User
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.review import Review
+
         new_object = {}
         for key, value in self.__objects.items():
-            my_model = BaseModel(**value)
+            a = key.split('.')
+            if a[0] == "BaseModel":
+                my_model = BaseModel(**value)
+            elif a[0] == "User":
+                my_model = User(**value)
+            elif a[0] == "State":
+                my_model = State(**value)
+            elif a[0] == "City":
+                my_model = City(**value)
+            elif a[0] == "Amenity":
+                my_model = Amenity(**value)
+            elif a[0] == "Review":
+                my_model = Review(**value)
             new_object[key] = my_model
 
         return new_object

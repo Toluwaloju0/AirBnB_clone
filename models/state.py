@@ -2,12 +2,16 @@
 """A module that defines a state"""
 
 
-from models.basemodel import BaseModel
+from models.base_model import BaseModel
 
-class state(BaseModel):
-    """A class that defijnes a state"""
+class State(BaseModel):
+    """A class that defines a state"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """A function to initialize variables"""
 
-        self.name = ""
+        if len(kwargs) > 0:
+            super().__init__(**kwargs)
+        else:
+            super().__init__()
+            self.name = ""

@@ -2,13 +2,17 @@
 """A module to define a city"""
 
 
-from models.basemodel import BaseModel
+from models.base_model import BaseModel
 
 class City(BaseModel):
     """A class of the city"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """A function to initialize variables"""
 
-        self.state_id = ""
-        self.name = ""
+        if len(kwargs) > 0:
+            super().__init__(**kwargs)
+        else:
+            super().__init__()
+            self.state_id = ""
+            self.name = ""
